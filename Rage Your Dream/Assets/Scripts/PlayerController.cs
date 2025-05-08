@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // 이동 속도
     public float moveSpeed = 5f;
 
-    // 컴포넌트 참조
     private Rigidbody rb;
     private Animator anim;
     private PlayerInput input;
@@ -13,73 +11,100 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 moveDirection;
 
+    public Transform targetEnemy; // 인스펙터에서 적 할당
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         input = GetComponent<PlayerInput>();
         stats = GetComponent<PlayerStats>();
+
+        // 넘어짐 방지 - X, Z 축 회전 고정 (Y축만 회전 가능)
+        rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        rb.useGravity = true;
     }
 
     void Update()
     {
-        HandleMovement();
         HandleActions();
         UpdateAnimations();
     }
 
-    void HandleMovement()
+    void FixedUpdate()
     {
-        // WASD 입력 받기
-        float h = Input.GetAxisRaw("Horizontal"); // A/D or Left/Right
-        float v = Input.GetAxisRaw("Vertical");   // W/S or Up/Down
+        HandleMovement();
+        HandleRotation();
+    }
 
-        moveDirection = new Vector3(h, 0, v).normalized;
+    void HandleMovement()
+{
+    float h = Input.GetAxisRaw("Horizontal");
+    float v = Input.GetAxisRaw("Vertical");
 
-        // 이동
-        Vector3 velocity = moveDirection * moveSpeed;
-        rb.velocity = new Vector3(velocity.x, rb.velocity.y, velocity.z);
+    Vector3 inputDir = new Vector3(h, 0, v).normalized;
+
+    if (targetEnemy != null)
+    {
+        // 적을 바라보는 방향을 기준으로 입력 방향 변환
+        Vector3 enemyDir = (targetEnemy.position - transform.position).normalized;
+        enemyDir.y = 0;
+
+        Quaternion enemyRot = Quaternion.LookRotation(enemyDir);
+        Vector3 moveDir = enemyRot * inputDir;
+
+        moveDirection = moveDir.normalized;
+    }
+    else
+    {
+        moveDirection = inputDir;
+    }
+
+    Vector3 moveOffset = moveDirection * moveSpeed * Time.fixedDeltaTime;
+    Vector3 newPos = rb.position + moveOffset;
+
+    rb.MovePosition(newPos);
+}
+
+
+    void HandleRotation()
+    {
+        if (targetEnemy != null)
+        {
+            Vector3 lookPos = targetEnemy.position - transform.position;
+            lookPos.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(lookPos);
+            rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, Time.fixedDeltaTime * 10f));
+        }
     }
 
     void HandleActions()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            // 가드 시작
             anim.SetBool("IsGuarding", true);
-            // stats.SetGuarding(true); // 가드 상태 세팅 (예시)
         }
         if (Input.GetKeyUp(KeyCode.F))
         {
-            // 가드 종료
             anim.SetBool("IsGuarding", false);
-            // stats.SetGuarding(false);
         }
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            // 궁극기 발동
             anim.SetTrigger("Ultimate");
-            // stats.UseUltimate(); // 궁극기 사용 처리
         }
-
         if (Input.GetKeyDown(KeyCode.K))
         {
-            // 약공격
             anim.SetTrigger("LightAttack");
-            // stats.DoLightAttack();
         }
-
         if (Input.GetKeyDown(KeyCode.L))
         {
-            // 강공격
             anim.SetTrigger("HeavyAttack");
-            // stats.DoHeavyAttack();
         }
     }
 
     void UpdateAnimations()
     {
         anim.SetFloat("Speed", moveDirection.magnitude);
+        anim.SetBool("isWalk", moveDirection.magnitude > 0.1f);
     }
 }

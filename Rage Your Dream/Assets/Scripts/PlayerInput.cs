@@ -48,7 +48,7 @@ public class PlayerInput : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.K))
         {
-            LightAttack();
+            Jab();
         }
 
         if (Input.GetKeyDown(KeyCode.L))
@@ -68,10 +68,32 @@ public class PlayerInput : MonoBehaviour
         // animator.SetTrigger("Guard");
     }
 
-    void LightAttack()
+    void Jab()
     {
-        Debug.Log("약공격!");
-        // animator.SetTrigger("LightAttack");
+        Debug.Log("잽!");
+        animator.SetTrigger("Jab"); // 애니메이터에 "Jab" 트리거 있어야 함
+    }
+
+    // 애니메이션 이벤트에서 호출될 타격 함수
+    public void DoJabAttack()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + transform.up, transform.forward, out hit, 2f))
+        {
+            if (hit.collider.CompareTag("Enemy"))
+            {
+                DealDamageToEnemy(hit.collider.gameObject, 5f); // 잽 데미지 예시
+            }
+        }
+    }
+
+    void DealDamageToEnemy(GameObject enemyObj, float damage)
+    {
+        Enemy enemy = enemyObj.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(damage);
+        }
     }
 
     void HeavyAttack()

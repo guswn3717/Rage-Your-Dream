@@ -280,22 +280,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &360848143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 360848134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 555cb255652a1664891f7761471bad22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
-  targetEnemy: {fileID: 1949385978}
-  dodgeForce: 12
-  dodgeDrag: 6
 --- !u!114 &360848145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309,6 +293,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetPosition: {x: 0, y: 1, z: 0}
+--- !u!114 &360848146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360848134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb137cd15c3e8b042a64f6575182f555, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &360848147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360848134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2e8798ef5c9468488e80d3d6e96a721, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &360848148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360848134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31aabf189350c2c4bbfa58644e206ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comboWindow: 0.7
+  comboGap: 0.15
+--- !u!114 &360848149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360848134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a55334060fcc00b468bfd1f7ac565144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dodgeForce: 12
+  dodgeDrag: 6
+  targetEnemy: {fileID: 1949385978}
+--- !u!114 &360848150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360848134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126594872e4fdc0459a435db49caeaa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
+  targetEnemy: {fileID: 1949385978}
 --- !u!1 &521852230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,10 +1198,22 @@ PrefabInstance:
       addedObject: {fileID: 360848142}
     - targetCorrespondingSourceObject: {fileID: 5971753015315665985, guid: d78d6574d7474cc4cbab0b1e43b418f3, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 360848143}
+      addedObject: {fileID: 360848145}
     - targetCorrespondingSourceObject: {fileID: 5971753015315665985, guid: d78d6574d7474cc4cbab0b1e43b418f3, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 360848145}
+      addedObject: {fileID: 360848150}
+    - targetCorrespondingSourceObject: {fileID: 5971753015315665985, guid: d78d6574d7474cc4cbab0b1e43b418f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 360848149}
+    - targetCorrespondingSourceObject: {fileID: 5971753015315665985, guid: d78d6574d7474cc4cbab0b1e43b418f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 360848148}
+    - targetCorrespondingSourceObject: {fileID: 5971753015315665985, guid: d78d6574d7474cc4cbab0b1e43b418f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 360848147}
+    - targetCorrespondingSourceObject: {fileID: 5971753015315665985, guid: d78d6574d7474cc4cbab0b1e43b418f3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 360848146}
   m_SourcePrefab: {fileID: 100100000, guid: d78d6574d7474cc4cbab0b1e43b418f3, type: 3}
 --- !u!1 &1819724477
 GameObject:

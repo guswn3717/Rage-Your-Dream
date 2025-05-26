@@ -15,11 +15,15 @@ public class PlayerController : MonoBehaviour
 
     public Transform targetEnemy;
 
-    // 닷지 관련 변수
     public float dodgeForce = 12f;
     public float dodgeDrag = 6f;
     private float originalDrag;
     private Vector3 dodgeDirection;
+
+    private int jabCount = 0;              // 잽 콤보 카운터
+    private bool isJabbing = false;
+    private float comboTimer = 0f;
+    private float comboWindow = 0.7f;
 
     void Start()
     {
@@ -38,6 +42,30 @@ public class PlayerController : MonoBehaviour
     {
         HandleActions();
         UpdateAnimations();
+
+        if (isJabbing)
+        {
+            comboTimer -= Time.deltaTime;
+
+            // 콤보 타임 아웃 시 콤보 종료
+            if (comboTimer <= 0f)
+            {
+                jabCount = 0;
+                isJabbing = false;
+                anim.SetBool("IsJabbing", false);
+            }
+
+            AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+
+            // 잽 애니메이션 거의 끝나고, 콤보 잽이 남아있을 때 다음 콤보 연결
+            if ((state.IsName("Jab") || state.IsName("Jab_Combo")) &&
+                state.normalizedTime >= 0.95f && jabCount > 0)
+            {
+                jabCount--;
+                anim.SetTrigger("Jab_Combo");
+                comboTimer = comboWindow;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -46,16 +74,6 @@ public class PlayerController : MonoBehaviour
             HandleMovement();
 
         HandleRotation();
-    }
-
-    // 공격 판정 시 호출 (충돌체나 레이캐스트 히트 대상)
-    void DealDamageToEnemy(GameObject enemyObj, float damage)
-    {
-        Enemy enemy = enemyObj.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            enemy.TakeDamage(damage);
-        }
     }
 
     void HandleMovement()
@@ -95,7 +113,6 @@ public class PlayerController : MonoBehaviour
 
     void HandleActions()
     {
-        // 닷지: 스페이스 + 입력방향
         if (Input.GetKeyDown(KeyCode.Space) && !isDodging)
         {
             Vector3 inputDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical")).normalized;
@@ -118,40 +135,53 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(DodgeRoutine(dodgeDirection));
         }
 
-        // 가드
         if (Input.GetKeyDown(KeyCode.F))
             anim.SetBool("IsGuarding", true);
         if (Input.GetKeyUp(KeyCode.F))
             anim.SetBool("IsGuarding", false);
 
-        // 공격 트리거 - 애니메이터에 맞게 트리거명 통일
         if (Input.GetKeyDown(KeyCode.K))
-            anim.SetTrigger("Jab");          // 약공격 (잽)
+        {
+            jabCount++;
+            if (!isJabbing)
+            {
+                JabStart();
+            }
+            comboTimer = comboWindow;
+        }
+
         if (Input.GetKeyDown(KeyCode.L))
-            anim.SetTrigger("HeavyAttack");  // 강공격
+            anim.SetTrigger("HeavyAttack");
+
         if (Input.GetKeyDown(KeyCode.Q))
-            anim.SetTrigger("Ultimate");     // 궁극기
+            anim.SetTrigger("Ultimate");
+    }
+
+    void JabStart()
+    {
+        isJabbing = true;
+        comboTimer = comboWindow;
+
+        anim.SetBool("IsJabbing", true);  // 잽 콤보 시작 시 true 설정
+        anim.SetTrigger("Jab");
     }
 
     IEnumerator DodgeRoutine(Vector3 dir)
     {
         isDodging = true;
-        anim.SetBool("isDodging", true); // 닷지 애니메이션 시작
+        anim.SetBool("isDodging", true);
 
-        // 애니메이션 선딜(닷지 모션 시작 대기)
         yield return new WaitForSeconds(0.15f);
 
-        // 대시 이동 시작
         rb.velocity = Vector3.zero;
         rb.drag = dodgeDrag;
         rb.AddForce(dir.normalized * dodgeForce, ForceMode.Impulse);
 
-        // 대시 지속 시간
         yield return new WaitForSeconds(0.15f);
 
         rb.drag = originalDrag;
         isDodging = false;
-        anim.SetBool("isDodging", false); // 닷지 애니메이션 종료
+        anim.SetBool("isDodging", false);
     }
 
     void UpdateAnimations()

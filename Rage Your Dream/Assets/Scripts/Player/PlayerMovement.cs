@@ -9,11 +9,14 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform targetEnemy;
     private PlayerJab jab;
+    private Animator anim;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         jab = GetComponent<PlayerJab>();
+        anim = GetComponent<Animator>();
+
         rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         rb.useGravity = true;
     }
@@ -22,8 +25,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (jab != null && jab.IsJabbing)
         {
-            // 잽 중엔 살짝 앞으로 밀어줌
+            // 잽 중엔 살짝 앞으로 밀어주고 걷기 애니메이션은 끔
             rb.MovePosition(rb.position + transform.forward * 0.5f * Time.fixedDeltaTime);
+            anim.SetFloat("MoveSpeed", 0f);
         }
         else
         {
@@ -53,6 +57,9 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 moveOffset = moveDirection * moveSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + moveOffset);
+
+        // 이동 속도 값으로 애니메이터 파라미터 세팅 (0~1 범위)
+        anim.SetFloat("MoveSpeed", moveDirection.magnitude);
     }
 
     void HandleRotation()

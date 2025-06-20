@@ -22,20 +22,16 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void FixedUpdate()
+{
+    if (jab != null && (jab.IsJabbing || jab.IsHeavyPunching))
     {
-        if (jab != null && jab.IsJabbing)
-        {
-            // 잽 중엔 살짝 앞으로 밀어주고 걷기 애니메이션은 끔
-            rb.MovePosition(rb.position + transform.forward * 0.5f * Time.fixedDeltaTime);
-            anim.SetFloat("MoveSpeed", 0f);
-        }
-        else
-        {
-            HandleMovement();
-        }
-
-        HandleRotation();
+        // 잽 또는 강펀치 중엔 이동 안됨 (원한다면 살짝 앞으로 밀기 가능)
+        return;
     }
+
+    HandleMovement();
+    HandleRotation();
+}
 
     void HandleMovement()
     {

@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class PlayerJab : MonoBehaviour
 {
-    [Header("Combo Settings")]
-    public float comboWindow = 0.7f; // 입력 가능한 시간
-    public float comboGap = 0.15f;   // 콤보 사이 약간의 텀
-
     private Animator anim;
     private bool isJabbing = false;
     private bool inputBuffered = false;
+    private bool isHeavyPunching = false;
     private float comboTimer = 0f;
-    private float gapTimer = 0f;
+    private float comboWindow = 0.7f;
 
-    public bool IsJabbing => isJabbing;
+    public bool IsJabbing => isJabbing; // 외부 이동 제어용
+    public bool IsHeavyPunching => isHeavyPunching;
+
+    [SerializeField] private float jabMaxIdleTime = 1.0f;
 
     void Start()
     {
@@ -21,69 +21,84 @@ public class PlayerJab : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
-        HandleCombo();
-    }
+        if (isHeavyPunching)
+        {
+            // 강펀치 중에는 잽 입력 막음
+            return;
+        }
 
-    void HandleInput()
-    {
         if (Input.GetKeyDown(KeyCode.K))
         {
             if (!isJabbing)
             {
-                StartJab();
+                JabStart();
             }
-            else if (gapTimer <= 0f) // 콤보 입력 간 텀 체크
+            else
             {
                 inputBuffered = true;
-                comboTimer = comboWindow;
+                comboTimer = comboWindow; // 콤보 창 재설정
             }
         }
-    }
 
-    void HandleCombo()
-    {
         if (!isJabbing) return;
 
         comboTimer -= Time.deltaTime;
-        gapTimer -= Time.deltaTime;
+
+        if (comboTimer <= -jabMaxIdleTime)
+        {
+            isJabbing = false;
+            anim.SetBool("IsJabbing", false);
+            inputBuffered = false;
+            return;
+        }
 
         AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
-
-        // 잽 끝나기 직전에 입력됐을 경우
         if ((state.IsName("Jab") || state.IsName("Jab_Combo")) &&
             state.normalizedTime >= 0.85f && inputBuffered)
         {
             inputBuffered = false;
             anim.SetTrigger("Jab_Combo");
             comboTimer = comboWindow;
-            gapTimer = comboGap; // 콤보 간 딜레이 부여
         }
 
-        // 입력 없고 애니 끝났으면 종료
         if ((state.IsName("Jab") || state.IsName("Jab_Combo")) &&
             state.normalizedTime >= 1.0f && !inputBuffered)
         {
             isJabbing = false;
             anim.SetBool("IsJabbing", false);
         }
-
-        // 입력 안 하고 시간 초과되면 종료
-        if (comboTimer <= 0f && !inputBuffered)
-        {
-            isJabbing = false;
-            anim.SetBool("IsJabbing", false);
-        }
     }
 
-    void StartJab()
+    void JabStart()
     {
         isJabbing = true;
-        inputBuffered = false;
         comboTimer = comboWindow;
-        gapTimer = comboGap;
+        inputBuffered = false;
 
         anim.SetBool("IsJabbing", true);
         anim.SetTrigger("Jab");
+    }
+
+    public bool CanHeavyPunch()
+    {
+        // 강펀치 가능 상태: 잽 콤보 중이거나 잽 중이지 않거나 (idle/walk 포함)
+        return !isHeavyPunching && (!isJabbing || anim.GetCurrentAnimatorStateInfo(0).IsName("Idle") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"));
+    }
+
+    public void HeavyPunchStart()
+    {
+        if (!CanHeavyPunch()) return;
+
+        isHeavyPunching = true;
+        isJabbing = false;
+        anim.SetBool("IsJabbing", false);
+
+        anim.SetTrigger("HeavyPunch");
+    }
+
+    // 애니메이션 이벤트로 호출 예정
+    public void HeavyPunchEnd()
+    {
+        isHeavyPunching = false;
     }
 }

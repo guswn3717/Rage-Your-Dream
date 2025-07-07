@@ -21,7 +21,9 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHP = maxHP;
+
         currentHL = maxHL;
+
         currentGuardHP = maxGuardHP;
     }
 
@@ -31,6 +33,7 @@ public class PlayerHealth : MonoBehaviour
         if(currentHL < maxHL && !isGuardBroken)
         {
             currentHL += Time.deltaTime * 5f; // 회복 속도 조절
+
             currentHL = Mathf.Min(currentHL, maxHL);
         }
     }
@@ -44,6 +47,7 @@ public class PlayerHealth : MonoBehaviour
 
             // HP도 깎이지만 데미지 배수 적용 (예: 0.2배)
             float guardDamageMultiplier = 0.2f;
+
             currentHP -= damage * guardDamageMultiplier;
 
             if(currentGuardHP <= 0 && !isGuardBroken)
@@ -60,6 +64,7 @@ public class PlayerHealth : MonoBehaviour
             {
                 // 강공격 맞으면 HL도 깎음
                 currentHL -= damage;
+
                 if (currentHL < 0) currentHL = 0;
             }
         }
@@ -68,6 +73,7 @@ public class PlayerHealth : MonoBehaviour
         {
             // 다운 처리
             Debug.Log("Player Down!");
+
             currentHP = 0;
         }
     }
@@ -75,13 +81,17 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator GuardBreak()
     {
         isGuardBroken = true;
+
         Debug.Log("Guard Broken! Stunned!");
+
         // 스턴 상태 처리 (이동 불가 등)
         yield return new WaitForSeconds(guardBreakStunDuration);
 
         // 가드 HP 즉시 66% 회복
         currentGuardHP = maxGuardHP * guardRecoveryPercent;
+
         isGuardBroken = false;
+        
         Debug.Log("Guard Recovered");
     }
 }

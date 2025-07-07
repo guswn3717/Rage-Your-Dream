@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     public float moveSpeed = 5f;
+
     private CharacterController controller;
     private Animator animator;
     private PlayerStats stats;
@@ -11,7 +12,9 @@ public class PlayerInput : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+
         animator = GetComponent<Animator>();
+
         stats = GetComponent<PlayerStats>();
     }
 
@@ -32,6 +35,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) h -= 1f;
 
         Vector3 move = new Vector3(h, 0, v).normalized;
+
         if (move.magnitude > 0)
         {
             controller.Move(move * moveSpeed * Time.deltaTime);
@@ -90,6 +94,7 @@ public class PlayerInput : MonoBehaviour
     void DealDamageToEnemy(GameObject enemyObj, float damage)
     {
         Enemy enemy = enemyObj.GetComponent<Enemy>();
+        
         if (enemy != null)
         {
             enemy.TakeDamage(damage);

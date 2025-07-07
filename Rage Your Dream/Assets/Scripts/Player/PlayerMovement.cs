@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private PlayerJab jab;
     private Animator anim;
 
+    //시발 집에 보내줘 응 아잇 프르르 응 아잇 으프르르 응 아잇 프르르
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -22,16 +24,15 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void FixedUpdate()
-{
-    if (jab != null && (jab.IsJabbing || jab.IsHeavyPunching))
     {
-        // 잽 또는 강펀치 중엔 이동 안됨 (원한다면 살짝 앞으로 밀기 가능)
-        return;
-    }
+        if (jab != null && (jab.IsJabbing || jab.IsHeavyPunching))
+        {
+            return;
+        }
 
-    HandleMovement();
-    HandleRotation();
-}
+        HandleMovement();
+        HandleRotation();
+    }
 
     void HandleMovement()
     {

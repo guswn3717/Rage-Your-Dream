@@ -13,6 +13,7 @@ public class PlayerGuard : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
             anim.SetBool("IsGuarding", true);
+            
         if (Input.GetKeyUp(KeyCode.F))
             anim.SetBool("IsGuarding", false);
     }

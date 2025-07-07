@@ -3,9 +3,11 @@ using UnityEngine;
 public class PlayerJab : MonoBehaviour
 {
     private Animator anim;
+
     private bool isJabbing = false;
     private bool inputBuffered = false;
     private bool isHeavyPunching = false;
+
     private float comboTimer = 0f;
     private float comboWindow = 0.7f;
 

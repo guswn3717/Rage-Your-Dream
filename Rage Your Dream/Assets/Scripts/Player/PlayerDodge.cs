@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
+
 public class PlayerDodge : MonoBehaviour
 {
     private Rigidbody rb;
@@ -9,6 +10,7 @@ public class PlayerDodge : MonoBehaviour
 
     private bool isDodging = false;
     private float originalDrag;
+
     public float dodgeForce = 12f;
     public float dodgeDrag = 6f;
 
@@ -17,7 +19,9 @@ public class PlayerDodge : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
         anim = GetComponent<Animator>();
+
         originalDrag = rb.drag;
     }
 
@@ -32,8 +36,11 @@ public class PlayerDodge : MonoBehaviour
             if (targetEnemy != null)
             {
                 Vector3 enemyDir = (targetEnemy.position - transform.position).normalized;
+
                 enemyDir.y = 0;
+
                 Quaternion enemyRot = Quaternion.LookRotation(enemyDir);
+
                 dodgeDirection = enemyRot * inputDir;
             }
             else
@@ -51,18 +58,23 @@ public class PlayerDodge : MonoBehaviour
     IEnumerator DodgeRoutine(Vector3 dir)
     {
         isDodging = true;
+        
         anim.SetBool("isDodging", true);
 
         yield return new WaitForSeconds(0.15f);
 
         rb.velocity = Vector3.zero;
+
         rb.drag = dodgeDrag;
+    
         rb.AddForce(dir.normalized * dodgeForce, ForceMode.Impulse);
 
         yield return new WaitForSeconds(0.15f);
 
         rb.drag = originalDrag;
+
         isDodging = false;
+
         anim.SetBool("isDodging", false);
     }
 

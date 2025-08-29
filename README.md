@@ -30,9 +30,6 @@ Please give it **lots of love**! ❤️
 
 ---
 
-## 💡 Fun Tip
-
-Think of this repo as a **game service hub**:  
 - 🎯 Mission: Save commits  
 - 🛡️ Armor: Backup the last commit  
 - 🚀 Power-Up: Moved to a new repo  

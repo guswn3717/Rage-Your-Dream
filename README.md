@@ -3,9 +3,9 @@
 ---
 
 Originally, I had **over 25 commits**, but GPT almost deleted all of them.  
-I barely managed to recover the **last commit**, but this repository has become **unmanageable**.  
+I barely managed to recover **just the last commit files**, but this repository had become **unmanageable**.  
 
-So, I’m moving the commits to:  
+So, I moved the commits to:  
 > **__________________**  
 
 Please give it **lots of love**! ❤️
@@ -16,9 +16,9 @@ Please give it **lots of love**! ❤️
 
 | Feature | Status |
 |---------|--------|
-| Commits Recovery | ✅ Completed |
-| Repository Cleanup | ⚠️ In Progress |
-| Moving Commits | 🔄 Pending |
+| Commits Recovery | ⚠️ Only last commit files recovered |
+| Repository Cleanup | ⚠️ Unmanageable |
+| Moving Commits | 🔄 Done to another repository |
 
 ---
 
@@ -26,7 +26,7 @@ Please give it **lots of love**! ❤️
 
 - This repository was a little chaotic 😅  
 - GPT tried to help, but almost wiped everything 😭  
-- Goal: Keep all important commits safe and organized  
+- Goal: Keep all important files safe and organized in the new repository  
 
 ---
 
@@ -34,8 +34,8 @@ Please give it **lots of love**! ❤️
 
 Think of this repo as a **game service hub**:  
 - 🎯 Mission: Save commits  
-- 🛡️ Armor: Backups  
-- 🚀 Power-Up: New repository  
+- 🛡️ Armor: Backup the last commit  
+- 🚀 Power-Up: Moved to a new repo  
 
 ---
 

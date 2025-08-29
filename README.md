@@ -6,7 +6,7 @@ Originally, I had **over 25 commits**, but GPT almost deleted all of them.
 I barely managed to recover **just the last commit files**, but this repository had become **unmanageable**.  
 
 So, I moved the commits to:  
-> **__________________**  
+> https://github.com/guswn3717/Help-Me-For-Rage-My-Dream
 
 Please give it **lots of love**! ❤️
 
